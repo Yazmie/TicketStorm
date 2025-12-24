@@ -1,0 +1,48 @@
+package com.ticketstorm.service.delayconsumer;
+
+import com.alibaba.fastjson.JSON;
+import com.ticketstorm.core.SpringUtil;
+import com.ticketstorm.util.StringUtil;
+import com.ticketstorm.core.ConsumerTask;
+import com.ticketstorm.dto.DelayOrderCancelDto;
+import com.ticketstorm.dto.OrderCancelDto;
+import com.ticketstorm.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import static com.ticketstorm.service.constant.OrderConstant.DELAY_ORDER_CANCEL_TOPIC;
+
+
+@Slf4j
+@Component
+public class DelayOrderCancelConsumer implements ConsumerTask {
+    
+    @Autowired
+    private OrderService orderService;
+    
+    @Override
+    public void execute(String content) {
+        log.info("延迟订单取消消息进行消费 content : {}", content);
+        if (StringUtil.isEmpty(content)) {
+            log.error("延迟队列消息不存在");
+            return;
+        }
+        DelayOrderCancelDto delayOrderCancelDto = JSON.parseObject(content, DelayOrderCancelDto.class);
+        
+        //取消订单
+        OrderCancelDto orderCancelDto = new OrderCancelDto();
+        orderCancelDto.setOrderNumber(delayOrderCancelDto.getOrderNumber());
+        boolean cancel = orderService.cancel(orderCancelDto);
+        if (cancel) {
+            log.info("延迟订单取消成功 orderCancelDto : {}",content);
+        }else {
+            log.error("延迟订单取消失败 orderCancelDto : {}",content);
+        }
+    }
+    
+    @Override
+    public String topic() {
+        return SpringUtil.getPrefixDistinctionName() + "-" + DELAY_ORDER_CANCEL_TOPIC;
+    }
+}

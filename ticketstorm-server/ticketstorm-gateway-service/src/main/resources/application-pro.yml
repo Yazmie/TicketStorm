@@ -1,0 +1,79 @@
+spring:
+  cloud:
+    gateway:
+      enabled: true
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: ${prefix.distinction.name:ticketstorm}-base-data-service
+          uri: lb://${prefix.distinction.name:ticketstorm}-base-data-service
+          predicates:
+            - Path=/ticketstorm/basedata/**
+          filters:
+            - StripPrefix=2
+          metadata:
+            title: 基础数据服务
+
+        - id: ${prefix.distinction.name:ticketstorm}-customize-service
+          uri: lb://${prefix.distinction.name:ticketstorm}-customize-service
+          predicates:
+            - Path=/ticketstorm/customize/**
+          filters:
+            - StripPrefix=2
+          metadata:
+            title: 定制化服务
+
+        - id: ${prefix.distinction.name:ticketstorm}-job-service
+          uri: lb://${prefix.distinction.name:ticketstorm}-job-service
+          predicates:
+            - Path=/ticketstorm/job/**
+          filters:
+            - StripPrefix=2
+          metadata:
+            title: 任务执行服务
+
+        - id: ${prefix.distinction.name:ticketstorm}-order-service
+          uri: lb://${prefix.distinction.name:ticketstorm}-order-service
+          predicates:
+            - Path=/ticketstorm/order/**
+          filters:
+            - StripPrefix=2
+          metadata:
+            title: 订单服务
+
+        - id: ${prefix.distinction.name:ticketstorm}-pay-service
+          uri: lb://${prefix.distinction.name:ticketstorm}-pay-service
+          predicates:
+            - Path=/ticketstorm/pay/**
+          filters:
+            - StripPrefix=2
+          metadata:
+            title: 支付服务
+
+        - id: ${prefix.distinction.name:ticketstorm}-program-service
+          uri: lb://${prefix.distinction.name:ticketstorm}-program-service
+          predicates:
+            - Path=/ticketstorm/program/**
+          filters:
+            - StripPrefix=2
+          metadata:
+            title: 节目服务
+
+        - id: ${prefix.distinction.name:ticketstorm}-user-service
+          uri: lb://${prefix.distinction.name:ticketstorm}-user-service
+          predicates:
+            - Path=/ticketstorm/user/**
+          filters:
+            - StripPrefix=2
+          metadata:
+            title: 用户服务
+            
+        - id: ${prefix.distinction.name:ticketstorm}-admin-service
+          uri: lb://${prefix.distinction.name:ticketstorm}-admin-service
+          predicates:
+            - Path=/ticketstorm/admin/**
+          filters:
+            - StripPrefix=2
+          metadata:
+            title: 监听服务    

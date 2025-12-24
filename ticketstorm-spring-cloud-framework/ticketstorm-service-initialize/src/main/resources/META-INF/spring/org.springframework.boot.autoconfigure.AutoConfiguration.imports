@@ -1,0 +1,2 @@
+com.ticketstorm.initialize.config.InitializeAutoConfig
+com.ticketstorm.initialize.impl.composite.CompositeAutoConfiguration

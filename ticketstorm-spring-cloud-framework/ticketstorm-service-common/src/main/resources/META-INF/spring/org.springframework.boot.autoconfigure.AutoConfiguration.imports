@@ -1,0 +1,2 @@
+com.ticketstorm.swagger.SwaggerConfiguration
+com.ticketstorm.mybatisplus.MybatisPlusAutoConfiguration

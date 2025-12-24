@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>ticketstorm</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+
+    <artifactId>ticketstorm-server</artifactId>
+    <packaging>pom</packaging>
+
+    <name>server</name>
+    <description>服务模块</description>
+
+    <modules>
+        <module>ticketstorm-order-service</module>
+        <module>ticketstorm-gateway-service</module>
+        <module>ticketstorm-base-data-service</module>
+        <module>ticketstorm-user-service</module>
+        <module>ticketstorm-admin-service</module>
+        <module>ticketstorm-customize-service</module>
+        <module>ticketstorm-program-service</module>
+        <module>ticketstorm-pay-service</module>
+        <module>ticketstorm-mybatis-plus-service</module>
+    </modules>
+</project>

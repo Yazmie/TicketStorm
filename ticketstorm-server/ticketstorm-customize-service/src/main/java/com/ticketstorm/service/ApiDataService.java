@@ -1,0 +1,65 @@
+package com.ticketstorm.service;
+
+import cn.hutool.core.collection.CollUtil;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ticketstorm.core.RepeatExecuteLimitConstants;
+import com.ticketstorm.util.StringUtil;
+import com.ticketstorm.dto.ApiDataDto;
+import com.ticketstorm.entity.ApiData;
+import com.ticketstorm.mapper.ApiDataMapper;
+import com.ticketstorm.repeatexecutelimit.annotion.RepeatExecuteLimit;
+import com.ticketstorm.vo.ApiDataVo;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+
+@Slf4j
+@Service
+public class ApiDataService extends ServiceImpl<ApiDataMapper,ApiData> {
+
+    @Autowired
+    private ApiDataMapper apiDataMapper;
+    
+    @RepeatExecuteLimit(name = RepeatExecuteLimitConstants.CONSUMER_API_DATA_MESSAGE,keys = {"#apiData.id"})
+    public void saveApiData(ApiData apiData){
+        ApiData dbApiData = apiDataMapper.selectById(apiData.getId());
+        if (Objects.isNull(dbApiData)) {
+            log.info("saveApiData apiData:{}", JSON.toJSONString(apiData));
+            apiDataMapper.insert(apiData);
+        }
+    }
+    
+    public Page<ApiDataVo> pageList(final ApiDataDto dto) {
+        Page<ApiData> page = Page.of(dto.getPageNo(), dto.getPageSize());
+        LambdaQueryWrapper<ApiData> queryWrapper = Wrappers.lambdaQuery(ApiData.class)
+                .eq(StringUtil.isNotEmpty(dto.getApiAddress()), ApiData::getApiAddress, dto.getApiAddress())
+                .eq(StringUtil.isNotEmpty(dto.getApiUrl()), ApiData::getApiUrl, dto.getApiUrl())
+                .ge(Objects.nonNull(dto.getStartDate()),ApiData::getCreateTime,dto.getStartDate())
+                .le(Objects.nonNull(dto.getEndDate()),ApiData::getCreateTime,dto.getEndDate());
+        Page<ApiData> apiDataPage = apiDataMapper.selectPage(page,queryWrapper);
+        List<ApiData> apiDataList = apiDataPage.getRecords();
+        Page<ApiDataVo> apiDataPageVo = new Page<>();
+        BeanUtils.copyProperties(apiDataPage,apiDataPageVo);
+        List<ApiDataVo> apiDataVoList = new ArrayList<>();
+        if (CollUtil.isNotEmpty(apiDataList)) {
+            apiDataVoList = apiDataList.stream().map(apiData -> {
+                ApiDataVo apiDataVo = new ApiDataVo();
+                BeanUtils.copyProperties(apiData,apiDataVo);
+                return apiDataVo;
+            }).collect(Collectors.toList());
+        }
+        apiDataPageVo.setRecords(apiDataVoList);
+        return apiDataPageVo;
+    }
+}
