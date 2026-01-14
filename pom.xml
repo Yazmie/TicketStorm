@@ -55,6 +55,7 @@
 		<fastjson.version>1.2.83</fastjson.version>
 		<oshi-core.version>6.2.2</oshi-core.version>
 		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<fastjson.version>2.0.9</fastjson.version>
 		<jdk.version>17</jdk.version>
 		<nacos.version>2.0.3</nacos.version>
 		<jasypt.version>3.0.5</jasypt.version>
@@ -62,7 +63,6 @@
 		<maven-resources.version>3.2.0</maven-resources.version>
 		<maven-source.version>3.2.1</maven-source.version>
 		<flatten-maven.version>1.4.1</flatten-maven.version>
-		<fastjson.version>2.0.9</fastjson.version>
 		<oshi-core.version>6.2.2</oshi-core.version>
 		<commons-lang.version>2.6</commons-lang.version>
 		<jjwt.version>0.9.1</jjwt.version>
