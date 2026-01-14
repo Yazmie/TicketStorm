@@ -1,8 +1,47 @@
+/**
+ * Copyright (c) 2008, SnakeYAML
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package org.yaml.snakeyaml.representer;
+
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.DumperOptions.FlowStyle;
+import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeId;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.ScalarNode;
+import org.yaml.snakeyaml.nodes.SequenceNode;
+import org.yaml.snakeyaml.nodes.Tag;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+// 解决shardingsphere 使用低版本snakeyaml和Springboot3不兼容问题
 
 public class Representer extends SafeRepresenter {
 
   protected Map<Class<? extends Object>, TypeDescription> typeDefinitions = Collections.emptyMap();
-  
+
   public Representer() {
     super(new DumperOptions());
     this.representers.put(null, new RepresentJavaBean());
@@ -64,7 +103,7 @@ public class Representer extends SafeRepresenter {
       Object memberValue = property.get(javaBean);
       Tag customPropertyTag = memberValue == null ? null : classTags.get(memberValue.getClass());
       NodeTuple tuple =
-          representJavaBeanProperty(javaBean, property, memberValue, customPropertyTag);
+              representJavaBeanProperty(javaBean, property, memberValue, customPropertyTag);
       if (tuple == null) {
         continue;
       }
@@ -95,7 +134,7 @@ public class Representer extends SafeRepresenter {
    * @return NodeTuple to be used in a MappingNode. Return null to skip the property
    */
   protected NodeTuple representJavaBeanProperty(Object javaBean, Property property,
-      Object propertyValue, Tag customTag) {
+                                                Object propertyValue, Tag customTag) {
     ScalarNode nodeKey = (ScalarNode) representData(property.getName());
     // the first occurrence of the node must keep the tag
     boolean hasAlias = this.representedObjects.containsKey(propertyValue);
