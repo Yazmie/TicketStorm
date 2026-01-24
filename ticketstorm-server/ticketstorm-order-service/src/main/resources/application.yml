@@ -25,17 +25,18 @@ spring:
   data:
     redis:
       database: 0
-      host: 192.168.176.133
+      host: 192.168.176.128
       port: 6379
       timeout: 3000
+      password: 123
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.176.133:8848
+        server-addr: 192.168.176.128:8848
 #        username: nacos
 #        password: nacos
   kafka:
-    bootstrap-servers: 192.168.176.133:9092
+    bootstrap-servers: 192.168.176.128:9092
     consumer:
       #默认的消费组ID
       group-id: create_order_data

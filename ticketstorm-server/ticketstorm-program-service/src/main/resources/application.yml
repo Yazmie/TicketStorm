@@ -30,9 +30,10 @@ spring:
   data:  
     redis:
       database: 0
-      host: 192.168.176.133
+      host: 192.168.176.128
       port: 6379
       timeout: 3000
+      password: 123
       jedis:
         pool:
           max-active: 300  
@@ -42,12 +43,12 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 192.168.176.133:8848
+        server-addr: 192.168.176.128:8848
 #        username: nacos
 #        password: nacos
       eager: true
   kafka:
-    bootstrap-servers: 192.168.176.133:9092
+    bootstrap-servers: 192.168.176.128:9092
     producer:
       retries: 1
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -101,7 +102,7 @@ jasypt:
     password: bgtjkjl!%^sdc
     algorithm: PBEWithMD5AndDES
 elasticsearch:
-  ip: 192.168.176.133:9200
+  ip: 192.168.176.128:9200
   userName: elastic
   passWord: elastic
 delay:
